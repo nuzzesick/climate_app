@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { inquirerMenu, pause, readInput } = require('./helpers/inquirer');
 const { Searches } = require('./models/searches');
 
@@ -10,7 +11,8 @@ const main = async () => {
       case 1:
         // Show message
         const place = await readInput('Place: ');
-        console.log(place);
+        await searches.city(place);
+
         // Search places
         // Select a place
         // Weather
@@ -26,6 +28,7 @@ const main = async () => {
     }
     if (opt !== 0) await pause();
   } while (opt !== 0);
+  console.clear();
 };
 
 main();
