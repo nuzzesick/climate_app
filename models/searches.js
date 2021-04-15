@@ -14,14 +14,19 @@ class Searches {
       language: 'en',
     };
   };
-  async city(place = '') {
+  async cities(place = '') {
     try {
       const instance = axios.create({
         baseURL: `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json`,
         params: this.paramsMapbox,
       });
       const res = await instance.get();
-      console.log(res.data);
+      return res.data.features.map((p) => ({
+        id: p.id,
+        name: p.place_name,
+        lng: p.center[0],
+        lat: p.center[1],
+      }));
     } catch (error) {
       return [];
     }
