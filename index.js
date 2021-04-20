@@ -18,14 +18,17 @@ const main = async () => {
         const placeSelected = places.find((p) => p.id === id);
         const { name, lat, lng } = placeSelected;
         // Weather
+        const weather = await searches.placeWeather(lat, lng);
+        const { temp, min, max, desc } = await weather;
         // Show results
         console.log('\nInformation of the city\n'.green);
         console.log('\nCity:\n', name);
         console.log('\nLat:\n', lat);
         console.log('\nLng:\n', lng);
-        console.log('\nTemperature:\n', );
-        console.log('\nMin:\n', );
-        console.log('\nMax:\n', );
+        console.log('\nTemperature:\n', temp);
+        console.log('\nMin:\n', min);
+        console.log('\nMax:\n', max);
+        console.log('\nWeather:\n', desc);
       break;
     }
     if (opt !== 0) await pause();

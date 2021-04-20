@@ -1,6 +1,5 @@
 const axios = require('axios');
 
-
 class Searches {
   history = [];
   constructor() {
@@ -12,6 +11,15 @@ class Searches {
       autocomplete: true,
       limit: 5,
       language: 'en',
+    };
+  };
+  paramsOpenWeatherMap(lat, lng) {
+    return {
+      lat,
+      lon: lng,
+      appid: process.env.OPENWEATHER_KEY,
+      units: 'metric',
+      lang: 'en',
     };
   };
   async cities(place = '') {
@@ -29,8 +37,27 @@ class Searches {
       }));
     } catch (error) {
       return [];
-    }
-  }
+    };
+  };
+  async placeWeather(lat, lng) {
+    try {
+      const instance = axios.create({
+        baseURL: 'https://api.openweathermap.org/data/2.5/weather',
+        params: this.paramsOpenWeatherMap(lat, lng),
+      });
+      const res = await instance.get();
+      const { data } = await res;
+      const { main, weather } = await data;
+      return {
+        temp: main.temp,
+        min: main.temp_min,
+        max: main.temp_max,
+        desc: weather[0].description,
+      };
+    } catch (error) {
+      console.log(error);
+    };
+  };
 };
 
 module.exports = { Searches };
