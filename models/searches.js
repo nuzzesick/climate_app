@@ -1,8 +1,12 @@
+const fs = require('fs');
 const axios = require('axios');
 
 class Searches {
-  history = [];
+  dbPath = './db/database.json';
+  history =  [];
   constructor() {
+    const file = JSON.parse(fs.readFileSync(this.dbPath, 'utf-8'));
+    this.history = file.history;
   }
   get paramsMapbox() {
     return {
@@ -58,6 +62,19 @@ class Searches {
       console.log(error);
     };
   };
+  async addToHistory(place = '') {
+    if (this.history.includes(place.toLowerCase())) {
+      return;
+    }
+    this.history.unshift(place);
+    this.saveDB();
+  };
+  saveDB() {
+    const payload = {
+      history: this.history,
+    };
+    fs.writeFileSync(this.dbPath, JSON.stringify(payload));
+  }
 };
 
 module.exports = { Searches };

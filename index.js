@@ -15,7 +15,10 @@ const main = async () => {
         const places = await searches.cities(place);
         // Select a place
         const id = await listPlaces(places);
+        if (id === '0') continue;
+        //Save in DB
         const placeSelected = places.find((p) => p.id === id);
+        searches.addToHistory(placeSelected.name);
         const { name, lat, lng } = placeSelected;
         // Weather
         const weather = await searches.placeWeather(lat, lng);
@@ -29,6 +32,11 @@ const main = async () => {
         console.log('\nMin:\n', min);
         console.log('\nMax:\n', max);
         console.log('\nWeather:\n', desc);
+      break;
+      case 2:
+        console.log(searches.history.forEach((e, i) => {
+          console.log(`${i + 1}. ${e}`);
+        }));
       break;
     }
     if (opt !== 0) await pause();
